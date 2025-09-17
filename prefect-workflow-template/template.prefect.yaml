@@ -1,0 +1,36 @@
+# prefect.yaml - Template
+
+name: __PROJECT_NAME__
+
+build:
+  - prefect_docker.deployments.steps.build_docker_image:
+      id: build-image
+      requires: prefect-docker>=0.4.0
+      # Der Image-Name wird dynamisch aus Registry und Projektname zusammengesetzt
+      image_name: "__DOCKER_REGISTRY__/__PROJECT_NAME__"
+      tag: "latest"
+      dockerfile: ./Dockerfile
+      platform: "linux/amd64"
+      
+  - prefect_docker.deployments.steps.push_docker_image:
+      image_name: "{{ build-image.image_name }}"
+      tag: "{{ build-image.tag }}"
+
+pull:
+  - prefect.deployments.steps.set_working_directory:
+      directory: /app
+
+deployments:
+  - name: main-deployment
+    entrypoint: __FLOW_FILE_NAME__:main_flow # Annahme: Der Flow heißt immer main_flow
+    
+    work_pool:
+      # Auch der Work Pool Name ist jetzt ein Platzhalter
+      name: "__WORK_POOL_NAME__"
+      
+      job_variables:
+        image: "{{ push-image.image }}"
+        image_pull_policy: Always
+        env:
+          # Der API-URL ist jetzt ein Platzhalter
+          PREFECT_API_URL: "__PREFECT_API_URL__"

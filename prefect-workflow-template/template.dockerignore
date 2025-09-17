@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Virtuelle Umgebungen
+.venv
+venv
+env
+
+# Python Cache und Bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE / Editor Konfigurationen
+.vscode/
+.idea/
+
+# Sensible Dateien / Lokale Umgebungsvariablen
+.env
+*.env
+
+# Testing-Artefakte
+.pytest_cache/
+
+# Lokale Datenbanken
+*.db
+*.sqlite
+*.sqlite3
+
+# Prefect-spezifisch (lokale DB)
+prefect.db
